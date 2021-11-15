@@ -1,0 +1,49 @@
+{
+    "id": "delete_older_15days",
+    "seqNo": 0,
+    "primaryTerm": 1,
+    "policy": {
+        "policy_id": "delete_older_15days",
+        "description": "A sample description of the policy",
+        "last_updated_time": 1636975260604,
+        "schema_version": 11,
+        "error_notification": null,
+        "default_state": "open",
+        "states": [
+            {
+                "name": "open",
+                "actions": [
+                    {
+                        "open": {}
+                    }
+                ],
+                "transitions": [
+                    {
+                        "state_name": "delete",
+                        "conditions": {
+                            "min_index_age": "15d"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "delete",
+                "actions": [
+                    {
+                        "delete": {}
+                    }
+                ],
+                "transitions": []
+            }
+        ],
+        "ism_template": [
+            {
+                "index_patterns": [
+                    "*"
+                ],
+                "priority": 1,
+                "last_updated_time": 1636975260603
+            }
+        ]
+    }
+}

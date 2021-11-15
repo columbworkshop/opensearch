@@ -1,16 +1,16 @@
 version: '3'
 services:
   opensearch-node1:
-    image: opensearchproject/opensearch
+    
+    image: opensearchproject/opensearch:1.1.0
     container_name: opensearch-node1
-    restart: always
     environment:
       - cluster.name=opensearch-cluster
       - node.name=opensearch-node1
       - discovery.seed_hosts=opensearch-node1,opensearch-node2
       - cluster.initial_master_nodes=opensearch-node1,opensearch-node2
       - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
-      - "OPENSEARCH_JAVA_OPTS=-Xms1024m -Xmx1024m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+      #- "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx2048m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
     ulimits:
       memlock:
         soft: -1
@@ -20,23 +20,21 @@ services:
         hard: 65536
     volumes:
       - opensearch-data1:/usr/share/opensearch/data
-#      - ./config/:/usr/share/opensearch/plugins/opensearch-security/securityconfig/
-#    ports:
-#      - 9200:9200
-#      - 9600:9600 # required for Performance Analyzer
+    ports:
+      - 9200:9200
+      - 9600:9600 # required for Performance Analyzer
     networks:
       - opensearch-net
   opensearch-node2:
-    image: opensearchproject/opensearch
+    image: opensearchproject/opensearch:1.1.0
     container_name: opensearch-node2
-    restart: always
     environment:
       - cluster.name=opensearch-cluster
       - node.name=opensearch-node2
       - discovery.seed_hosts=opensearch-node1,opensearch-node2
       - cluster.initial_master_nodes=opensearch-node1,opensearch-node2
       - bootstrap.memory_lock=true
-      - "OPENSEARCH_JAVA_OPTS=-Xms1024m -Xmx1024m"
+      #- "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx2048m"
     ulimits:
       memlock:
         soft: -1
@@ -51,7 +49,6 @@ services:
   opensearch-dashboards:
     image: opensearchproject/opensearch-dashboards:1.1.0
     container_name: opensearch-dashboards
-    restart: always
     ports:
       - 5601:5601
     expose:
@@ -63,15 +60,12 @@ services:
   logstash:
     image: opensearchproject/logstash-oss-with-opensearch-output-plugin:7.13.2
     container_name: logstash
-    restart: always
     volumes:
       - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
     ports:
-      - "5044:5044"
-      - "5514:5514/udp"
+      - 5044:5044
     expose:
       - "5044"
-      - "5514/udp"
     depends_on:
       - opensearch-node1
     networks:
@@ -83,3 +77,4 @@ volumes:
 
 networks:
   opensearch-net:
+
