@@ -1,7 +1,7 @@
 version: '3'
 services:
   opensearch-node1:
-    image: opensearchproject/opensearch
+    image: opensearchproject/opensearch:2.3.0
     container_name: os01
     restart: always
     environment:
@@ -27,7 +27,7 @@ services:
     networks:
       - opensearch-net
   opensearch-node2:
-    image: opensearchproject/opensearch
+    image: opensearchproject/opensearch:2.3.0
     container_name: os02
     restart: always
     environment:
@@ -50,7 +50,7 @@ services:
       - opensearch-net
 
   opensearch-dashboards:
-    image: opensearchproject/opensearch-dashboards
+    image: opensearchproject/opensearch-dashboards:2.3.0
     container_name: dashboards
     restart: always
     ports:
@@ -64,7 +64,7 @@ services:
 
 
   logstash:
-    image: opensearchproject/logstash-oss-with-opensearch-output-plugin:7.13.2
+    image: opensearchproject/logstash-oss-with-opensearch-output-plugin:8.4.0
     container_name: logstash
     restart: always
     volumes:
